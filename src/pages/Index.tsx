@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Icon from "@/components/ui/icon";
 
 const HERO_IMG = "https://cdn.poehali.dev/projects/8a142de5-d45b-42be-a800-ba491ded5f3e/files/0cbc81ea-9d53-42b3-a573-68ba3a3a6f08.jpg";
@@ -5,6 +6,131 @@ const DOCTOR_IMG = "https://cdn.poehali.dev/projects/8a142de5-d45b-42be-a800-ba4
 
 function record() {
   window.open("https://wa.me/7423xxxxxxx?text=Запись%20на%20акцию%20iTOP", "_blank");
+}
+
+function ContactForm() {
+  const [form, setForm] = useState({ name: "", phone: "", service: "", comment: "" });
+  const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
+    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!form.name.trim() || !form.phone.trim()) return;
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setSent(true);
+    }, 1200);
+  }
+
+  if (sent) {
+    return (
+      <div className="card-glass rounded-3xl p-10 flex flex-col items-center justify-center text-center gap-5 min-h-[400px]">
+        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-lilac to-gold flex items-center justify-center animate-scale-in">
+          <Icon name="CheckCheck" size={36} className="text-deep" />
+        </div>
+        <h3 className="font-display text-3xl font-semibold text-foreground">Заявка принята!</h3>
+        <p className="text-muted-foreground">Перезвоним вам в течение <span className="text-gold font-semibold">15 минут</span></p>
+        <button
+          onClick={() => setSent(false)}
+          className="btn-outline-gold px-6 py-2.5 rounded-full text-sm font-semibold mt-2"
+        >
+          Отправить ещё одну
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="card-glass rounded-3xl p-8 space-y-5">
+      <div>
+        <h3 className="font-display text-2xl font-semibold text-foreground mb-1">Оставить заявку</h3>
+        <p className="text-muted-foreground text-sm">Перезвоним за 15 минут в рабочее время</p>
+      </div>
+
+      <div>
+        <label className="text-xs text-muted-foreground uppercase tracking-wider mb-2 block">Ваше имя *</label>
+        <input
+          type="text"
+          name="name"
+          value={form.name}
+          onChange={handleChange}
+          placeholder="Иван Иванов"
+          required
+          className="w-full bg-muted/50 border border-border rounded-xl px-4 py-3 text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-gold/50 focus:ring-1 focus:ring-gold/30 transition-all"
+        />
+      </div>
+
+      <div>
+        <label className="text-xs text-muted-foreground uppercase tracking-wider mb-2 block">Телефон *</label>
+        <input
+          type="tel"
+          name="phone"
+          value={form.phone}
+          onChange={handleChange}
+          placeholder="+7 (___) ___-__-__"
+          required
+          className="w-full bg-muted/50 border border-border rounded-xl px-4 py-3 text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-gold/50 focus:ring-1 focus:ring-gold/30 transition-all"
+        />
+      </div>
+
+      <div>
+        <label className="text-xs text-muted-foreground uppercase tracking-wider mb-2 block">Услуга</label>
+        <select
+          name="service"
+          value={form.service}
+          onChange={handleChange}
+          className="w-full bg-muted/50 border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-gold/50 transition-all"
+        >
+          <option value="">Выберите услугу...</option>
+          <option>iTOP Гигиена — 1 250 ₽ (акция)</option>
+          <option>Имплант Nobel — от 85 000 ₽</option>
+          <option>Hollywood Smile — 15 000 ₽</option>
+          <option>Лечение кариеса</option>
+          <option>Первичная консультация (бесплатно)</option>
+          <option>Другое</option>
+        </select>
+      </div>
+
+      <div>
+        <label className="text-xs text-muted-foreground uppercase tracking-wider mb-2 block">Комментарий</label>
+        <textarea
+          name="comment"
+          value={form.comment}
+          onChange={handleChange}
+          rows={3}
+          placeholder="Опишите проблему или задайте вопрос..."
+          className="w-full bg-muted/50 border border-border rounded-xl px-4 py-3 text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-gold/50 focus:ring-1 focus:ring-gold/30 transition-all resize-none"
+        />
+      </div>
+
+      <button
+        type="submit"
+        disabled={loading}
+        className="btn-gold w-full py-4 rounded-xl text-base font-bold flex items-center justify-center gap-3 disabled:opacity-70"
+      >
+        {loading ? (
+          <>
+            <Icon name="Loader2" size={20} className="animate-spin" />
+            Отправляем...
+          </>
+        ) : (
+          <>
+            <Icon name="CalendarCheck" size={20} />
+            Записаться на приём
+          </>
+        )}
+      </button>
+
+      <p className="text-xs text-muted-foreground text-center">
+        Нажимая кнопку, вы соглашаетесь с обработкой персональных данных
+      </p>
+    </form>
+  );
 }
 
 export default function Index() {
@@ -373,45 +499,50 @@ export default function Index() {
         <div className="absolute inset-0 bg-gradient-to-br from-lilac-dark/30 via-background to-background pointer-events-none" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gold/8 blur-[80px] rounded-full pointer-events-none" />
 
-        <div className="container mx-auto px-6 relative text-center">
-          <div className="inline-flex items-center gap-2 mb-6">
-            <div className="h-px w-8 bg-gold opacity-50" />
-            <span className="text-gold text-sm tracking-[0.2em] uppercase">Запись</span>
-            <div className="h-px w-8 bg-gold opacity-50" />
+        <div className="container mx-auto px-6 relative">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 mb-4">
+              <div className="h-px w-8 bg-gold opacity-50" />
+              <span className="text-gold text-sm tracking-[0.2em] uppercase">Запись</span>
+              <div className="h-px w-8 bg-gold opacity-50" />
+            </div>
+            <h2 className="font-display text-5xl md:text-6xl font-light mb-4">
+              Запишитесь за <span className="gold-gradient italic">30 секунд!</span>
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-lg mx-auto">
+              Перезвоним в течение 15 минут и подберём удобное время
+            </p>
           </div>
 
-          <h2 className="font-display text-5xl md:text-6xl font-light mb-4">
-            Запишитесь за <span className="gold-gradient italic">30 секунд!</span>
-          </h2>
-          <p className="text-muted-foreground text-lg mb-10 max-w-lg mx-auto">
-            Нажмите кнопку и напишите нам в WhatsApp — ответим мгновенно
-          </p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-5xl mx-auto">
+            {/* Контакты */}
+            <div className="space-y-5">
+              {[
+                { icon: "Phone", val: "+7 (423) xxx-xx-xx", label: "Телефон", note: "Звонок бесплатный" },
+                { icon: "MessageCircle", val: "WhatsApp 24/7", label: "Мессенджер", note: "Ответим за 5 минут" },
+                { icon: "MapPin", val: "Владивосток, центр", label: "Адрес", note: "10 мин от остановки" },
+                { icon: "Clock", val: "Пн–Вс: 9:00 – 21:00", label: "График работы", note: "Без выходных" },
+              ].map((c) => (
+                <div key={c.label} className="card-glass rounded-2xl p-5 flex items-center gap-4 hover:border-gold/40 transition-all duration-300 group cursor-pointer">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-lilac/20 to-gold/20 flex items-center justify-center shrink-0 group-hover:from-gold/20 group-hover:to-lilac/20 transition-all">
+                    <Icon name={c.icon} size={20} className="text-gold" fallback="Info" />
+                  </div>
+                  <div>
+                    <div className="text-xs text-muted-foreground">{c.label}</div>
+                    <div className="font-semibold text-foreground">{c.val}</div>
+                    <div className="text-xs text-gold">{c.note}</div>
+                  </div>
+                </div>
+              ))}
 
-          <button
-            onClick={record}
-            className="btn-gold px-14 py-6 rounded-full text-xl font-bold inline-flex items-center gap-3 mb-10 animate-pulse-gold"
-          >
-            <Icon name="CalendarCheck" size={26} />
-            Записаться онлайн
-          </button>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto mt-4">
-            {[
-              { icon: "Phone", val: "+7 (423) xxx-xx-xx", label: "Телефон" },
-              { icon: "MessageCircle", val: "WhatsApp 24/7", label: "Мессенджер" },
-              { icon: "MapPin", val: "Центр, 10 мин от остановки", label: "Адрес" },
-            ].map((c) => (
-              <div key={c.label} className="card-glass rounded-2xl p-5 hover:border-gold/40 transition-all duration-300">
-                <Icon name={c.icon} size={20} className="text-gold mx-auto mb-2" fallback="Info" />
-                <div className="font-semibold text-foreground text-sm">{c.val}</div>
-                <div className="text-xs text-muted-foreground mt-1">{c.label}</div>
+              <div className="mt-4 inline-flex items-center gap-3 px-5 py-3 rounded-full border border-gold/30 bg-gold/5 w-full justify-center">
+                <Icon name="ShieldCheck" size={16} className="text-gold" />
+                <span className="text-foreground text-sm font-semibold">НЕ ЖДИТЕ БОЛИ — запишитесь сейчас!</span>
               </div>
-            ))}
-          </div>
+            </div>
 
-          <div className="mt-14 inline-flex items-center gap-3 px-6 py-3 rounded-full border border-gold/30 bg-gold/5">
-            <Icon name="ShieldCheck" size={18} className="text-gold" />
-            <span className="text-foreground font-semibold">НЕ ЖДИТЕ БОЛИ — запишитесь сейчас!</span>
+            {/* Форма */}
+            <ContactForm />
           </div>
         </div>
       </section>
