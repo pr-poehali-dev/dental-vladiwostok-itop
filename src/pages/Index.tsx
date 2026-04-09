@@ -34,7 +34,7 @@ function ContactForm() {
           <Icon name="CheckCheck" size={36} className="text-deep" />
         </div>
         <h3 className="font-display text-3xl font-semibold text-foreground">Заявка принята!</h3>
-        <p className="text-muted-foreground">Перезвоним вам в течение <span className="text-gold font-semibold">15 минут</span></p>
+        <p className="text-muted-foreground">Мы свяжемся с вами в течение <span className="text-gold font-semibold">часа</span> и подберём лучший вариант</p>
         <button
           onClick={() => setSent(false)}
           className="btn-outline-gold px-6 py-2.5 rounded-full text-sm font-semibold mt-2"
