@@ -96,18 +96,6 @@ function ContactForm() {
         </select>
       </div>
 
-      <div>
-        <label className="text-xs text-muted-foreground uppercase tracking-wider mb-2 block">Комментарий</label>
-        <textarea
-          name="comment"
-          value={form.comment}
-          onChange={handleChange}
-          rows={3}
-          placeholder="Опишите проблему или задайте вопрос..."
-          className="w-full bg-muted/50 border border-border rounded-xl px-4 py-3 text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-gold/50 focus:ring-1 focus:ring-gold/30 transition-all resize-none"
-        />
-      </div>
-
       <button
         type="submit"
         disabled={loading}
